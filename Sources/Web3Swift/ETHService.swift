@@ -118,25 +118,30 @@ public protocol ETHService: AnyObject {
   func getTransaction(hash: Hash) async throws -> Transaction
   
   /// Returns a list of pending transactions.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getpendingtransactions
   func getPendingTransactions() async throws -> [Transaction]
   
   /// Returns a transaction based on a block number and the transaction’s index position.
   /// - parameter blockNumber: A block number or the string "earliest", "latest" or "pending" as in the default block parameter.
   /// - parameter indexNumber: The transaction’s index position.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#gettransactionfromblock
   func getTransactionFromBlock(_ blockNumber: BlockNumber, indexNumber: Int) async throws -> Transaction
   
   /// Returns a transaction based on a block hash and the transaction’s index position.
   /// - parameter blockHash: A block hash.
   /// - parameter indexNumber: The transaction’s index position.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#gettransactionfromblock
   func getTransactionFromBlock(_ blockHash: Hash, indexNumber: Int) async throws -> Transaction
   
   /// Returns the receipt of a transaction by transaction hash.
   /// - parameter hash: The transaction hash.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#gettransactionreceipt
   func getTransactionReceipt(hash: Hash) async throws -> TransactionReceipt
   
   /// Get the number of transactions sent from this address.
   /// - parameter address: The address to get the numbers of transactions from.
   /// - parameter blockNumber: If you pass this parameter it will not use the default block set with web3.eth.defaultBlock. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#gettransactioncount
   func getTransactionCount(address: Address, blockNumber: BlockNumber) async throws -> Int
   
   
@@ -192,6 +197,7 @@ public extension ETHService {
   
   /// Get the number of transactions sent from this address.
   /// - parameter address: The address to get the numbers of transactions from.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#gettransactioncount
   func getTransactionCount(address: Address) async throws -> Int {
     try await getTransactionCount(address: address, blockNumber: defaultBlock)
   }
