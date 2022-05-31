@@ -4,19 +4,23 @@
 import Foundation
 
 public struct UnformattedData: Equatable {
-  public let stringValue: String
-  public var bytes: [UInt8] { .init(hex: stringValue) }
+  public let hexString: String
   
-  public init(stringValue: String) {
-    if stringValue.isHex {
-      self.stringValue = stringValue
-    } else {
-      self.stringValue = stringValue.appendingHexPrefixIfNeeded()
-    }
+  public init(hexString: String) {
+    self.hexString = hexString.appendingHexPrefixIfNeeded()
+  }
+}
+
+public extension UnformattedData {
+  var bytes: [UInt8] { .init(hex: hexString) }
+  var data: Data { bytes.data }
+  
+  init(bytes: [UInt8]) {
+    self.init(hexString: bytes.toHexString())
   }
   
-  public init(bytes: [UInt8]) {
-    self.init(stringValue: bytes.toHexString())
+  init(data: Data) {
+    self.init(bytes: data.bytes)
   }
 }
 
@@ -30,7 +34,7 @@ extension UnformattedData: ExpressibleByArrayLiteral {
 // MARK: ExpressibleByStringLiteral
 extension UnformattedData: ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
-    self.init(stringValue: value)
+    self.init(hexString: value)
   }
 }
 
@@ -38,7 +42,7 @@ extension UnformattedData: ExpressibleByStringLiteral {
 extension UnformattedData: Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
-    stringValue = try container.decode(String.self)
+    hexString = try container.decode(String.self)
   }
 }
 
@@ -46,6 +50,6 @@ extension UnformattedData: Decodable {
 extension UnformattedData: Encodable {
   public func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
-    try container.encode(stringValue)
+    try container.encode(hexString)
   }
 }

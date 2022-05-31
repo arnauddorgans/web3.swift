@@ -18,15 +18,15 @@ public struct Block: Decodable {
   /// Hash of the generated proof-of-work. null when its pending block.
   public let nonce: Hash?
   /// SHA3 of the uncles data in the block.
-  public let sha3Uncles: Data
+  public let sha3Uncles: UnformattedData
   /// The bloom filter for the logs of the block. null when its pending block.
-  public let logsBloom: Data?
+  public let logsBloom: UnformattedData?
   /// The root of the transaction trie of the block.
-  public let transactionsRoot: Data
+  public let transactionsRoot: UnformattedData
   /// The root of the final state trie of the block.
-  public let stateRoot: Data
+  public let stateRoot: UnformattedData
   /// The root of the receipts trie of the block.
-  public let receiptsRoot: Data
+  public let receiptsRoot: UnformattedData
   /// The address of the beneficiary to whom the mining rewards were given.
   public let miner: Address
   /// Integer of the difficulty for this block.
@@ -36,7 +36,7 @@ public struct Block: Decodable {
   @Web3Formatted<HexToBN?>
   public private(set) var totalDifficulty: BigInt?
   /// The “extra data” field of this block.
-  public let extraData: Data
+  public let extraData: UnformattedData
   /// Integer the size of this block in bytes.
   @Web3Formatted<HexToNumber>
   public private(set) var size: Int

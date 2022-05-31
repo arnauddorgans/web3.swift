@@ -17,5 +17,5 @@ public struct TransactionCall: Encodable {
   /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
   public var value: BigInt?
   /// Either a ABI byte string containing the data of the function call on a contract, or in the case of a contract-creation transaction the initialisation code.
-  public var data: Data?
+  public var data: UnformattedData?
 }

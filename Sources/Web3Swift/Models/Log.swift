@@ -12,11 +12,11 @@ public struct Log: Decodable {
   @Web3Formatted<HexToNumber?>
   public private(set) var logIndex: Int?
   /// Contains one or more 32 Bytes non-indexed arguments of the log.
-  public let data: Data
+  public let data: UnformattedData
   /// true when the log was removed, due to a chain reorganization. false if its a valid log.
   public let removed: Bool
   /// Array of 0 to 4 32 Bytes DATA of indexed log arguments.
-  public let topics: [Data]
+  public let topics: [UnformattedData]
   /// The block number where this log was in. null when its pending. null when its pending log.
   @Web3Formatted<HexToNumber?>
   public private(set) var blockNumber: Int?

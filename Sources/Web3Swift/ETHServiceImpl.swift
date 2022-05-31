@@ -62,7 +62,7 @@ extension ETHServiceImpl: ETHService {
     }
   }
   
-  func getStorageAt(address: Address, position: Int, blockNumber: BlockNumber) async throws -> Data {
+  func getStorageAt(address: Address, position: Int, blockNumber: BlockNumber) async throws -> UnformattedData {
     try await jsonRPCService.request(method: "eth_getStorageAt") {
       address
       utils.numberToHex(position)
@@ -70,7 +70,7 @@ extension ETHServiceImpl: ETHService {
     }
   }
   
-  func getCode(address: Address, blockNumber: BlockNumber) async throws -> Data {
+  func getCode(address: Address, blockNumber: BlockNumber) async throws -> UnformattedData {
     try await jsonRPCService.request(method: "eth_getCode") {
       address
       blockNumber
@@ -164,7 +164,7 @@ extension ETHServiceImpl: ETHService {
     }
   }
   
-  func call(transaction: TransactionCall, blockNumber: BlockNumber) async throws -> Data {
+  func call(transaction: TransactionCall, blockNumber: BlockNumber) async throws -> UnformattedData {
     try await jsonRPCService.request(method: "eth_call") {
       transaction
       blockNumber

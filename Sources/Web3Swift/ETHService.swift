@@ -60,13 +60,13 @@ public protocol ETHService: AnyObject {
   /// - parameter position: The index position of the storage.
   /// - parameter blockNumber: If you pass this parameter it will not use the default block set with web3.eth.defaultBlock. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getstorageat
-  func getStorageAt(address: Address, position: Int, blockNumber: BlockNumber) async throws -> Data
+  func getStorageAt(address: Address, position: Int, blockNumber: BlockNumber) async throws -> UnformattedData
   
   /// Get the code at a specific address.
   /// - parameter address: The address to get the code from.
   /// - parameter blockNumber: If you pass this parameter it will not use the default block set with web3.eth.defaultBlock. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getcode
-  func getCode(address: Address, blockNumber: BlockNumber) async throws -> Data
+  func getCode(address: Address, blockNumber: BlockNumber) async throws -> UnformattedData
   
   /// Returns a block matching the block number or block hash.
   /// - parameter hashOrNumber: The block number or block hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
@@ -116,7 +116,7 @@ public protocol ETHService: AnyObject {
   /// Executes a message call transaction, which is directly executed in the VM of the node, but never mined into the blockchain.
   /// - parameter transaction: A transaction object, see web3.eth.sendTransaction. For calls the from property is optional however it is highly recommended to explicitly set it or it may default to address(0) depending on your node or provider.
   /// - parameter blockNumber: If you pass this parameter it will not use the default block set with web3.eth.defaultBlock. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used.
-  func call(transaction: TransactionCall, blockNumber: BlockNumber) async throws -> Data
+  func call(transaction: TransactionCall, blockNumber: BlockNumber) async throws -> UnformattedData
 }
 
 public extension ETHService {
@@ -139,7 +139,7 @@ public extension ETHService {
   /// - parameter address: The address to get the storage from.
   /// - parameter position: The index position of the storage.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getstorageat
-  func getStorageAt(address: Address, position: Int) async throws -> Data {
+  func getStorageAt(address: Address, position: Int) async throws -> UnformattedData {
     try await getStorageAt(address: address, position: position, blockNumber: defaultBlock)
   }
   
@@ -147,7 +147,7 @@ public extension ETHService {
   /// - parameter address: The address to get the code from.
   /// - parameter blockNumber: If you pass this parameter it will not use the default block set with web3.eth.defaultBlock. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getcode
-  func getCode(address: Address) async throws -> Data {
+  func getCode(address: Address) async throws -> UnformattedData {
     try await getCode(address: address, blockNumber: defaultBlock)
   }
   
@@ -159,7 +159,7 @@ public extension ETHService {
   
   /// Executes a message call transaction, which is directly executed in the VM of the node, but never mined into the blockchain.
   /// - parameter transaction: A transaction object, see web3.eth.sendTransaction. For calls the from property is optional however it is highly recommended to explicitly set it or it may default to address(0) depending on your node or provider.
-  func call(transaction: TransactionCall) async throws -> Data {
+  func call(transaction: TransactionCall) async throws -> UnformattedData {
     try await call(transaction: transaction, blockNumber: defaultBlock)
   }
 }

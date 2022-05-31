@@ -22,9 +22,9 @@ public protocol ABIService {
     
   /// Decodes an ABI encoded parameter to its Swift type.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth-abi.html#decodeparameter
-  func decodeParameter(_ data: UnformattedData, as valueType: ABIValueType) throws -> ABIValue
+  func decodeParameter(_ data: Data, as valueType: ABIValueType) throws -> ABIValue
   
   /// Decodes ABI encoded parameters to its Swift types.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth-abi.html#decodeparameters
-  func decodeParameters(_ data: UnformattedData, as valueTypes: [ABIValueType]) throws -> [ABIValue]
+  func decodeParameters(_ data: Data, as valueTypes: [ABIValueType]) throws -> [ABIValue]
 }

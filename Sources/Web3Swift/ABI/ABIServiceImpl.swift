@@ -35,13 +35,13 @@ extension ABIServiceImpl: ABIService {
     return .init(bytes: bytes)
   }
   
-  func decodeParameter(_ data: UnformattedData, as valueType: ABIValueType) throws -> ABIValue {
-    guard case let .tuple(values) = try rawService.decodeRaw(data.bytes, as: .tuple([valueType])) else { fatalError() }
+  func decodeParameter(_ data: Data, as valueType: ABIValueType) throws -> ABIValue {
+    guard case let .tuple(values) = try rawService.decodeRaw(data.bytes, as: .tuple([valueType])) else { throw ABICodingError() }
     return values[0]
   }
   
-  func decodeParameters(_ data: UnformattedData, as valueTypes: [ABIValueType]) throws -> [ABIValue] {
-    guard case let .tuple(values) = try rawService.decodeRaw(data.bytes, as: .tuple(valueTypes)) else { fatalError() }
+  func decodeParameters(_ data: Data, as valueTypes: [ABIValueType]) throws -> [ABIValue] {
+    guard case let .tuple(values) = try rawService.decodeRaw(data.bytes, as: .tuple(valueTypes)) else { throw ABICodingError() }
     return values
   }
 }

@@ -23,7 +23,7 @@ public struct Transaction: Decodable {
   /// Hash of the transaction.
   public let hash: Hash
   /// The data send along with the transaction.
-  public let input: Data
+  public let input: UnformattedData
   /// The number of transactions made by the sender prior to this one.
   @Web3Formatted<HexToNumber>
   public private(set) var nonce: Int
@@ -36,9 +36,9 @@ public struct Transaction: Decodable {
   @Web3Formatted<HexToBN>
   public private(set) var value: BigInt
   /// ECDSA recovery id
-  public let v: Data
+  public let v: UnformattedData
   /// ECDSA signature r
-  public let r: Data
+  public let r: UnformattedData
   /// ECDSA signature s
-  public let s: Data
+  public let s: UnformattedData
 }
