@@ -57,20 +57,21 @@ final class E2EWeb3Tests: XCTestCase {
   }
   
   func testGetBlock() async throws {
-    _ = try await web3.eth.getBlock(hashOrNumber: .latest, transactionObjects: true)
+    _ = try await web3.eth.getBlock(.latest, transactionObjects: true)
   }
   
   func testGetBlockTransactionCount() async throws {
-    _ = try await web3.eth.getBlockTransactionCount(hashOrNumber: .latest)
+    let count = try await web3.eth.getBlockTransactionCount(14817187)
+    XCTAssertEqual(count, 188)
   }
   
   func testGetBlockUncleCount() async throws {
-    let count = try await web3.eth.getBlockUncleCount(hashOrNumber: 14817187)
+    let count = try await web3.eth.getBlockUncleCount(14817187)
     XCTAssertEqual(count, 1)
   }
   
   func testGetUncle() async throws {
-    let uncle = try await web3.eth.getUncle(blockHashOrNumber: 14817187, uncleIndex: 0)
+    let uncle = try await web3.eth.getUncle(blockNumber: 14817187, uncleIndex: 0)
     XCTAssertEqual(uncle.number, 14817186)
   }
   
@@ -83,10 +84,15 @@ final class E2EWeb3Tests: XCTestCase {
 //  }
   
   func testGetTransactionFromBlock() async throws {
-    _ = try await web3.eth.getTransactionFromBlock(hashOrNumber: 14836747, indexNumber: 2)
+    _ = try await web3.eth.getTransactionFromBlock(14836747, indexNumber: 2)
   }
   
   func testGetTransactionReceipt() async throws {
     _ = try await web3.eth.getTransactionReceipt(hash: "0xab059a62e22e230fe0f56d8555340a29b2e9532360368f810595453f6fdd213b")
+  }
+  
+  func testGetTransactionCount() async throws {
+    let count = try await web3.eth.getTransactionCount(address: "0x11f4d0A3c12e86B4b5F39B213F7E19D048276DAe")
+    XCTAssertEqual(count, 0)
   }
 }

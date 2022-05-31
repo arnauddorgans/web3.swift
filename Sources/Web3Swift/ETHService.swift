@@ -68,27 +68,49 @@ public protocol ETHService: AnyObject {
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getcode
   func getCode(address: Address, blockNumber: BlockNumber) async throws -> UnformattedData
   
-  /// Returns a block matching the block number or block hash.
-  /// - parameter hashOrNumber: The block number or block hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// Returns a block matching the block number.
+  /// - parameter blockNumber: The block number or the string "earliest", "latest" or "pending" as in the default block parameter.
   /// - parameter transactionObjects: If specified true, the returned block will contain all transactions as objects. If false it will only contains the transaction hashes.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblock
-  func getBlock(hashOrNumber blockHashOrNumber: BlockHashOrNumber, transactionObjects: Bool) async throws -> Block
+  func getBlock(_ blockNumber: BlockNumber, transactionObjects: Bool) async throws -> Block
+  
+  /// Returns a block matching the block hash.
+  /// - parameter blockHash: The block hash.
+  /// - parameter transactionObjects: If specified true, the returned block will contain all transactions as objects. If false it will only contains the transaction hashes.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblock
+  func getBlock(_ blockHash: Hash, transactionObjects: Bool) async throws -> Block
   
   /// Returns the number of transaction in a given block.
-  /// - parameter hashOrNumber: The block number or hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// - parameter blockNumber: The block number. Or the string "earliest", "latest" or "pending" as in the default block parameter.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblocktransactioncount
-  func getBlockTransactionCount(hashOrNumber blockHashOrNumber: BlockHashOrNumber) async throws -> Int
+  func getBlockTransactionCount(_ blockNumber: BlockNumber) async throws -> Int
+  
+  /// Returns the number of transaction in a given block.
+  /// - parameter blockHash: The block hash.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblocktransactioncount
+  func getBlockTransactionCount(_ blockHash: Hash) async throws -> Int
+  
+  /// Returns the number of uncles in a block from a block matching the given block number.
+  /// - parameter blockNumber: The block number. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblockunclecount
+  func getBlockUncleCount(_ blockNumber: BlockNumber) async throws -> Int
   
   /// Returns the number of uncles in a block from a block matching the given block hash.
-  /// - parameter hashOrNumber: The block number or hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// - parameter blockHash: The block hash.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblockunclecount
-  func getBlockUncleCount(hashOrNumber blockHashOrNumber: BlockHashOrNumber) async throws -> Int
+  func getBlockUncleCount(_ blockHash: Hash) async throws -> Int
   
   /// Returns a blocks uncle by a given uncle index position.
-  /// - parameter blockHashOrNumber: The block number or hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// - parameter blockNumber: The block number or the string "earliest", "latest" or "pending" as in the default block parameter.
   /// - parameter uncleIndex: The index position of the uncle.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getuncle
-  func getUncle(blockHashOrNumber: BlockHashOrNumber, uncleIndex: Int) async throws -> Block
+  func getUncle(blockNumber: BlockNumber, uncleIndex: Int) async throws -> Block
+  
+  /// Returns a blocks uncle by a given uncle index position.
+  /// - parameter blockHash: The block hash.
+  /// - parameter uncleIndex: The index position of the uncle.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getuncle
+  func getUncle(blockHash: Hash, uncleIndex: Int) async throws -> Block
   
   /// Returns a transaction matching the given transaction hash.
   /// - parameter hash: The transaction hash.
@@ -98,14 +120,24 @@ public protocol ETHService: AnyObject {
   /// Returns a list of pending transactions.
   func getPendingTransactions() async throws -> [Transaction]
   
-  /// Returns a transaction based on a block hash or number and the transaction’s index position.
-  /// - parameter hashOrNumber: A block number or hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// Returns a transaction based on a block number and the transaction’s index position.
+  /// - parameter blockNumber: A block number or the string "earliest", "latest" or "pending" as in the default block parameter.
   /// - parameter indexNumber: The transaction’s index position.
-  func getTransactionFromBlock(hashOrNumber blockHashOrNumber: BlockHashOrNumber, indexNumber: Int) async throws -> Transaction
+  func getTransactionFromBlock(_ blockNumber: BlockNumber, indexNumber: Int) async throws -> Transaction
+  
+  /// Returns a transaction based on a block hash and the transaction’s index position.
+  /// - parameter blockHash: A block hash.
+  /// - parameter indexNumber: The transaction’s index position.
+  func getTransactionFromBlock(_ blockHash: Hash, indexNumber: Int) async throws -> Transaction
   
   /// Returns the receipt of a transaction by transaction hash.
   /// - parameter hash: The transaction hash.
   func getTransactionReceipt(hash: Hash) async throws -> TransactionReceipt
+  
+  /// Get the number of transactions sent from this address.
+  /// - parameter address: The address to get the numbers of transactions from.
+  /// - parameter blockNumber: If you pass this parameter it will not use the default block set with web3.eth.defaultBlock. Pre-defined block numbers as "earliest", "latest" and "pending" can also be used.
+  func getTransactionCount(address: Address, blockNumber: BlockNumber) async throws -> Int
   
   
   
@@ -128,11 +160,18 @@ public extension ETHService {
     try await getBalance(address: address, blockNumber: defaultBlock)
   }
   
-  /// Returns a block matching the block number or block hash.
-  /// - parameter hashOrNumber: The block number or block hash. Or the string "earliest", "latest" or "pending" as in the default block parameter.
+  /// Returns a block matching the block number.
+  /// - parameter blockNumber: The block number or the string "earliest", "latest" or "pending" as in the default block parameter.
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblock
-  func getBlock(hashOrNumber blockHashOrNumber: BlockHashOrNumber) async throws -> Block {
-    try await getBlock(hashOrNumber: blockHashOrNumber, transactionObjects: false)
+  func getBlock(_ blockNumber: BlockNumber, transactionObjects: Bool) async throws -> Block {
+    try await getBlock(blockNumber, transactionObjects: false)
+  }
+  
+  /// Returns a block matching the block hash.
+  /// - parameter blockHash: The block hash.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#getblock
+  func getBlock(_ blockHash: Hash, transactionObjects: Bool) async throws -> Block {
+    try await getBlock(blockHash, transactionObjects: false)
   }
   
   /// Get the storage at a specific position of an address.
@@ -151,6 +190,11 @@ public extension ETHService {
     try await getCode(address: address, blockNumber: defaultBlock)
   }
   
+  /// Get the number of transactions sent from this address.
+  /// - parameter address: The address to get the numbers of transactions from.
+  func getTransactionCount(address: Address) async throws -> Int {
+    try await getTransactionCount(address: address, blockNumber: defaultBlock)
+  }
   
   
   
@@ -161,5 +205,60 @@ public extension ETHService {
   /// - parameter transaction: A transaction object, see web3.eth.sendTransaction. For calls the from property is optional however it is highly recommended to explicitly set it or it may default to address(0) depending on your node or provider.
   func call(transaction: TransactionCall) async throws -> UnformattedData {
     try await call(transaction: transaction, blockNumber: defaultBlock)
+  }
+}
+
+// MARK: Internal
+protocol ETHServiceInternal: ETHService {
+  func getBlock(hashOrNumber blockHashOrNumber: BlockHashOrNumber, transactionObjects: Bool) async throws -> Block
+  
+  func getBlockTransactionCount(hashOrNumber blockHashOrNumber: BlockHashOrNumber) async throws -> Int
+  
+  func getBlockUncleCount(hashOrNumber blockHashOrNumber: BlockHashOrNumber) async throws -> Int
+  
+  func getUncle(blockHashOrNumber: BlockHashOrNumber, uncleIndex: Int) async throws -> Block
+  
+  func getTransactionFromBlock(hashOrNumber blockHashOrNumber: BlockHashOrNumber, indexNumber: Int) async throws -> Transaction
+}
+
+extension ETHServiceInternal {
+  func getBlock(_ blockHash: Hash, transactionObjects: Bool) async throws -> Block {
+    try await getBlock(hashOrNumber: .hash(blockHash), transactionObjects: transactionObjects)
+  }
+  
+  func getBlock(_ blockNumber: BlockNumber, transactionObjects: Bool) async throws -> Block {
+    try await getBlock(hashOrNumber: .number(blockNumber), transactionObjects: transactionObjects)
+  }
+  
+  func getBlockTransactionCount(_ blockHash: Hash) async throws -> Int {
+    try await getBlockTransactionCount(hashOrNumber: .hash(blockHash))
+  }
+  
+  func getBlockTransactionCount(_ blockNumber: BlockNumber) async throws -> Int {
+    try await getBlockTransactionCount(hashOrNumber: .number(blockNumber))
+  }
+  
+  func getBlockUncleCount(_ blockHash: Hash) async throws -> Int {
+    try await getBlockUncleCount(hashOrNumber: .hash(blockHash))
+  }
+  
+  func getBlockUncleCount(_ blockNumber: BlockNumber) async throws -> Int {
+    try await getBlockUncleCount(hashOrNumber: .number(blockNumber))
+  }
+  
+  func getUncle(blockHash: Hash, uncleIndex: Int) async throws -> Block {
+    try await getUncle(blockHashOrNumber: .hash(blockHash), uncleIndex: uncleIndex)
+  }
+  
+  func getUncle(blockNumber: BlockNumber, uncleIndex: Int) async throws -> Block {
+    try await getUncle(blockHashOrNumber: .number(blockNumber), uncleIndex: uncleIndex)
+  }
+  
+  func getTransactionFromBlock(_ blockHash: Hash, indexNumber: Int) async throws -> Transaction {
+    try await getTransactionFromBlock(hashOrNumber: .hash(blockHash), indexNumber: indexNumber)
+  }
+  
+  func getTransactionFromBlock(_ blockNumber: BlockNumber, indexNumber: Int) async throws -> Transaction {
+    try await getTransactionFromBlock(hashOrNumber: .number(blockNumber), indexNumber: indexNumber)
   }
 }

@@ -20,7 +20,7 @@ final class ETHServiceImpl {
   }
 }
 
-extension ETHServiceImpl: ETHService {
+extension ETHServiceImpl: ETHServiceInternal {
   var abi: ABIService { abiService }
       
   func getProtocolVersion() async throws -> String {
@@ -161,6 +161,13 @@ extension ETHServiceImpl: ETHService {
   func getTransactionReceipt(hash: Hash) async throws -> TransactionReceipt {
     try await jsonRPCService.request(method: "eth_getTransactionReceipt") {
       hash
+    }
+  }
+  
+  func getTransactionCount(address: Address, blockNumber: BlockNumber) async throws -> Int {
+    try await jsonRPCService.request(method: "eth_getTransactionCount", formatter: HexToNumber.self) {
+      address
+      blockNumber
     }
   }
   
