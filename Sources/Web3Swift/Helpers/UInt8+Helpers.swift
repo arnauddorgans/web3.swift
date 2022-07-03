@@ -4,6 +4,13 @@
 import Foundation
 
 extension Array where Element == UInt8 {
+  func bytes() -> [String] {
+    self
+      .map { String($0, radix: 2) }
+      .map { String(repeating: "0", count: 8 - $0.count) + $0 }
+      .flatMap { $0.map { String($0 as Character) } }
+  }
+  
   func padded(to multipleOf: Int,
               withByte byte: UInt8 = 0x0,
               alignment: BytePaddingAlignment) -> [UInt8] {
@@ -16,6 +23,12 @@ extension Array where Element == UInt8 {
   }
   
   var data: Data { .init(self) }
+  
+  static func random(size: Int) -> [UInt8] {
+    (0..<size).map { _ in
+      .random(in: UInt8.min...UInt8.max)
+    }
+  }
 }
 
 enum BytePaddingAlignment {

@@ -3,7 +3,6 @@
 
 import Foundation
 import BigInt
-import CryptoSwift
 
 final class ABIRawServiceImpl { }
 
@@ -12,7 +11,7 @@ extension ABIRawServiceImpl: ABIRawService {
   /// - seealso: https://docs.soliditylang.org/en/v0.8.13/abi-spec.html#function-selector-and-argument-encoding
   func encodeRawFunctionSignature(_ signature: String) throws -> [UInt8] {
     guard let data = signature.data(using: .ascii) else { throw ABICodingError() }
-    let hash = SHA3(variant: .keccak256).calculate(for: data.bytes)
+    let hash = keccak256(data.bytes)
     return try hash[safe: ..<4]
   }
   
