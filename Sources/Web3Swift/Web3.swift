@@ -16,8 +16,12 @@ public final class Web3 {
     let jsonCoderService = JSONCoderServiceImpl()
     jsonCoderService.setValue(utils, forUserInfoKey: .utils)
     let jsonRPCService = JSONRPCServiceImpl(environmentService: environmentService, jsonCoderService: jsonCoderService)
+    let accountsService = AccountsServiceImpl()
     let abiService = ABIServiceImpl(rawService: ABIRawServiceImpl())
-    self.eth = ETHServiceImpl(abiService: abiService, jsonRPCService: jsonRPCService, utils: utils)
+    self.eth = ETHServiceImpl(accountsService: accountsService,
+                              abiService: abiService,
+                              jsonRPCService: jsonRPCService,
+                              utils: utils)
     self.utils = utils
   }
 }

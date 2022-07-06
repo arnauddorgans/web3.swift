@@ -2,10 +2,24 @@
 // 
 
 import Foundation
+import secp256k1
 
-protocol SECP256K1 {
-  func createPrivateKey(bytes: [UInt8]) throws -> ECDSAPrivateKey
+func secp256k1PrivateKey(bytes: [UInt8]) throws -> ECDSAPrivateKey {
+  let privateKey = try secp256k1.Signing.PrivateKey(rawRepresentation: bytes, format: .uncompressed)
+  return .init(privateKey: privateKey)
+}
+
+struct ECDSAPrivateKey {
+  fileprivate let privateKey: secp256k1.Signing.PrivateKey
+
+  var bytes: [UInt8] { privateKey.rawRepresentation.bytes }
+  var publicKey: ECDSAPublicKey { .init(publicKey: privateKey.publicKey) }
+}
+
+struct ECDSAPublicKey {
+  fileprivate let publicKey: secp256k1.Signing.PublicKey
   
-  #warning("Address is Ethereum related not SECP256K1")
-  func address(publicKey: ECDSAPublicKey) throws -> [UInt8]
+  var isCompressed: Bool { publicKey.format == .compressed }
+
+  var bytes: [UInt8] { publicKey.rawRepresentation.bytes }
 }

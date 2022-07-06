@@ -4,7 +4,7 @@
 import Foundation
 
 extension Array where Element == UInt8 {
-  func bytes() -> [String] {
+  func bits() -> [String] {
     self
       .map { String($0, radix: 2) }
       .map { String(repeating: "0", count: 8 - $0.count) + $0 }

@@ -5,15 +5,18 @@ import Foundation
 import BigInt
 
 final class ETHServiceImpl {
+  private let accountsService: AccountsService
   private let abiService: ABIService
   private let jsonRPCService: JSONRPCService
   private let utils: Web3Utils
   
   var defaultBlock: BlockNumber = .latest
   
-  init(abiService: ABIService,
+  init(accountsService: AccountsService,
+       abiService: ABIService,
        jsonRPCService: JSONRPCService,
        utils: Web3Utils) {
+    self.accountsService = accountsService
     self.abiService = abiService
     self.jsonRPCService = jsonRPCService
     self.utils = utils
@@ -21,6 +24,7 @@ final class ETHServiceImpl {
 }
 
 extension ETHServiceImpl: ETHServiceInternal {
+  var accounts: AccountsService { accountsService }
   var abi: ABIService { abiService }
       
   func getProtocolVersion() async throws -> String {

@@ -5,6 +5,10 @@ import Foundation
 import BigInt
 
 public protocol ETHService: AnyObject {
+  /// The web3.eth.accounts contains functions to generate Ethereum accounts and sign transactions and data.
+  /// - seealso: https://web3js.readthedocs.io/en/v1.7.4/web3-eth-accounts.html#web3-eth-accounts
+  var accounts: AccountsService { get }
+  
   /// The web3.eth.abi functions let you encode and decode parameters to ABI (Application Binary Interface) for function calls to the EVM (Ethereum Virtual Machine).
   /// - seealso: https://web3js.readthedocs.io/en/v1.7.3/web3-eth.html#abi
   var abi: ABIService { get }

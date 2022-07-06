@@ -28,7 +28,7 @@ let package = Package(
         "CryptoSwift",
         .product(name: "secp256k1", package: "secp256k1.swift")
       ], resources: [
-        .process("Mnemonic/Resources")
+        .process("BIP/39/Resources")
       ]),
     .testTarget(
       name: "Web3SwiftTests",
