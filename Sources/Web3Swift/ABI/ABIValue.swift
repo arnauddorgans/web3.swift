@@ -5,6 +5,7 @@ import Foundation
 import BigInt
 
 public enum ABIValue: Equatable {
+  case address(String)
   case uint(Int, BigUInt)
   case int(Int, BigInt)
   case bool(Bool)
@@ -17,6 +18,7 @@ public enum ABIValue: Equatable {
   
   public var type: ABIValueType {
     switch self {
+    case .address:        return .address
     case .bool:           return .bool
     case .bytes:          return .bytes
     case .string:         return .string

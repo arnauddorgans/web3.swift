@@ -5,6 +5,7 @@ import Foundation
 
 /// - seealso: https://solidity-fr.readthedocs.io/fr/latest/abi-spec.html#types
 public indirect enum ABIValueType: Equatable {
+  case address
   case uint(Int)
   case int(Int)
   case bool
@@ -39,9 +40,10 @@ public extension ABIValueType {
 extension ABIValueType {
   var signature: String {
     switch self {
-    case .bool:   return "bool"
-    case .bytes:  return "bytes"
-    case .string: return "string"
+    case .address:  return "address"
+    case .bool:     return "bool"
+    case .bytes:    return "bytes"
+    case .string:   return "string"
     case let .uint(size):
       return "uint\(size)"
     case let .int(size):
@@ -58,7 +60,7 @@ extension ABIValueType {
   }
   var encodedBytesSize: Int? {
     switch self {
-    case .uint(_), .int(_), .bool:
+    case .uint(_), .int(_), .bool, .address:
       return 32
     case let .sizedBytes(size):
       return size.roundedUp(toMultipleOf: 32)

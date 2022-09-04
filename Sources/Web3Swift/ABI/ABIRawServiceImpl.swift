@@ -17,6 +17,8 @@ extension ABIRawServiceImpl: ABIRawService {
   
   func encodeRaw(_ value: ABIValue) throws -> [UInt8] {
     switch value {
+    case let .address(address):
+      return try encodeAddress(address)
     case let .uint(_, bigUInt):
       return encodeUInt(bigUInt)
     case let .int(_, bigInt):
@@ -40,6 +42,8 @@ extension ABIRawServiceImpl: ABIRawService {
   
   func decodeRaw(_ bytes: [UInt8], as valueType: ABIValueType) throws -> ABIValue {
     switch valueType {
+    case .address:
+      return try .address(decodeAddress(bytes))
     case let .uint(size):
       return .uint(size, .init(decodeUInt(bytes)))
     case let .int(size):
@@ -207,4 +211,19 @@ extension ABIRawServiceImpl {
       .sorted(by: { $0.key < $1.key })
       .map(\.value)
   }
+}
+
+// MARK: Address
+extension ABIRawServiceImpl {
+    func encodeAddress(_ value: String) throws -> [UInt8] {
+        guard let uint = BigUInt(value.removingHexPrefix(), radix: 16) else {
+            throw ABICodingError()
+        }
+        return encodeUInt(uint)
+    }
+    
+    func decodeAddress(_ bytes: [UInt8]) throws -> String {
+        let uint = decodeUInt(bytes)
+        return uint.serialize().toHexString().appendingHexPrefixIfNeeded()
+    }
 }

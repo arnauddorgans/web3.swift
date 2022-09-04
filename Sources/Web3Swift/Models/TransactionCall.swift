@@ -7,7 +7,7 @@ import BigInt
 /// The transaction call object
 public struct TransactionCall: Encodable {
   /// The address for the sending account. Uses the web3.eth.defaultAccount property, if not specified. Or an address or index of a local wallet in web3.eth.accounts.wallet.
-  public var from: Address
+  public var from: Address?
   /// The destination address of the message, left undefined for a contract-creation transaction.
   public var to: Address?
   /// The value transferred for the transaction in wei, also the endowment if it’s a contract-creation transaction.
@@ -34,4 +34,34 @@ public struct TransactionCall: Encodable {
   public var hardfork: String?
   /// The common object
   public var common: Common?
+    
+    public init(from: Address? = nil,
+                to: Address? = nil,
+                value: BigInt? = nil,
+                gas: Int? = nil,
+                gasPrice: BigInt? = nil,
+                type: UInt8? = nil,
+                maxFeePerGas: BigInt? = nil,
+                maxPriorityFeePerGas: BigInt? = nil,
+                accessList: [Address]? = nil,
+                data: UnformattedData? = nil,
+                nonce: Int? = nil,
+                chain: String? = nil,
+                hardfork: String? = nil,
+                common: Common? = nil) {
+               self.from = from
+               self.to = to
+               self.value = value
+               self.gas = gas
+               self.gasPrice = gasPrice
+               self.type = type
+               self.maxFeePerGas = maxFeePerGas
+               self.maxPriorityFeePerGas = maxPriorityFeePerGas
+               self.accessList = accessList
+               self.data = data
+               self.nonce = nonce
+               self.chain = chain
+               self.hardfork = hardfork
+               self.common = common
+           }
 }

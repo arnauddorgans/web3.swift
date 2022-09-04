@@ -152,6 +152,20 @@ final class ABIRawServiceTests: XCTestCase {
     let array = try service.decodeRaw(bytes, as: .array(.int))
     XCTAssertEqual(array, .array(.int, [.int(1), .int(-1)]))
   }
+    
+
+    // MARK: Address
+    func testEncodeAddress() throws {
+        let bytes = try service.encodeRaw(.address("0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb"))
+        XCTAssertEqual(bytes.toHexString(), "000000000000000000000000b47e3cd837ddf8e4c57f05d70ab865de6e193bbb")
+    }
+    
+    func testDecodeAddress() throws {
+        let bytes: [UInt8] = .init(hex: "000000000000000000000000b47e3cd837ddf8e4c57f05d70ab865de6e193bbb")
+        let address = try service.decodeRaw(bytes, as: .address)
+        XCTAssertEqual(address, .address("0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb"))
+    }
+
   
   // MARK: Tuple
   func testEncodeTypleWithDynamicAndStatic() throws {
